@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AgriVision AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;800&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#f1f5f2;--card:rgba(255,255,255,.7);--tx:#12241d;--mut:#51635b;--em:#0F382C;--mint:#22C55E;--gold:#D97706;--bd:rgba(15,56,44,.15);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1613;--card:rgba(255,255,255,.06);--tx:#e6f1ec;--mut:#9db3a9;--bd:rgba(255,255,255,.14)}}
+:root[data-theme=dark]{--bg:#0b1613;--card:rgba(255,255,255,.06);--tx:#e6f1ec;--mut:#9db3a9;--bd:rgba(255,255,255,.14)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 Manrope,system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.1;margin:0 0 .5em}
+h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800}h2{font-size:2rem}
+a{color:inherit}
+nav{position:sticky;top:0;z-index:10;display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:10px 20px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--em);color:#fff}
+nav b{font-family:Fraunces,serif;font-size:1.25rem;margin-right:auto;cursor:pointer}nav b i{color:var(--mint);font-style:normal}
+nav a{padding:6px 10px;border-radius:8px;text-decoration:none;font-size:.85rem;cursor:pointer;color:#cfe8dc}nav a.on,nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+select,input,button{font:inherit}
+nav select,.ic{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:5px 8px}nav option{color:#000}
+.btn{background:var(--mint);color:#04210f;border:0;border-radius:10px;padding:10px 18px;font-weight:800;cursor:pointer}
+.btn.s{background:transparent;color:var(--tx);border:1.5px solid var(--em)}.btn.g{background:var(--gold);color:#fff}
+.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main{max-width:1100px;margin:auto;padding:28px 20px 60px}
+.card{background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--bd);border-radius:16px;padding:20px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.hero{background:linear-gradient(135deg,#0F382C,#14532d);color:#fff;border-radius:24px;padding:40px 28px;margin-bottom:24px}
+.hero p{max-width:60ch;color:#cfe8dc}.row{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.cmp{position:relative;height:150px;border-radius:14px;overflow:hidden;user-select:none;margin-top:24px}
+.cmp>div{position:absolute;inset:0;padding:18px;display:flex;flex-direction:column;justify-content:center}
+.bad{background:#7c2d12}.good{background:#166534;clip-path:inset(0 0 0 var(--p,50%))}
+.cmp input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.knob{position:absolute;top:0;bottom:0;left:var(--p,50%);width:3px;background:#fff;pointer-events:none}
+.stat b{font:800 2rem Fraunces,serif;color:var(--mint);display:block}
+.badge{display:inline-block;font-size:.75rem;font-weight:800;padding:3px 9px;border-radius:99px;background:rgba(34,197,94,.18);color:#15803d}
+.badge.g{background:rgba(217,119,6,.18);color:var(--gold)}
+.drop{border:2px dashed var(--em);border-radius:16px;min-height:240px;display:grid;place-items:center;text-align:center;position:relative;overflow:hidden;cursor:pointer}
+.drop.hv{background:rgba(34,197,94,.12)}.drop img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.sample{position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,#facc15 0 12%,transparent 13%),radial-gradient(circle at 60% 55%,#f59e0b 0 14%,transparent 15%),radial-gradient(circle at 45% 70%,#fde047 0 10%,transparent 11%),linear-gradient(#365314,#14532d)}
+.ret{position:absolute;left:0;right:0;height:3px;background:var(--mint);box-shadow:0 0 18px 6px var(--mint);animation:sc 1.4s linear infinite;display:none}
+.scan .ret{display:block}@keyframes sc{from{top:0}to{top:100%}}
+@media(prefers-reduced-motion:reduce){.ret{animation:none;top:50%}}
+label{display:block;font-size:.85rem;font-weight:600;margin:10px 0 4px;color:var(--mut)}
+input[type=text],input[type=number],input[type=date],select.f{width:100%;padding:9px 10px;border-radius:9px;border:1px solid var(--bd);background:var(--card);color:var(--tx)}
+.cert{border:3px double var(--gold);background:#fffdf7;color:#1c1917;border-radius:12px;padding:24px;position:relative}
+.cert code{word-break:break-all;font-size:.72rem;display:block;background:#f5f0e1;padding:8px;border-radius:6px}
+.seal{position:absolute;right:18px;top:18px;width:74px;height:74px;border-radius:50%;background:radial-gradient(#fbbf24,#b45309);color:#fff;display:grid;place-items:center;font:800 .62rem/1.1 Manrope;text-align:center;transform:rotate(-12deg)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin:12px 0;font-size:.9rem}.kv span{color:#78716c}
+input[type=range]{width:100%;accent-color:var(--mint)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.chip{padding:6px 14px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}.chip.on{background:var(--em);color:#fff}
+.bar{height:10px;border-radius:9px;background:var(--bd);overflow:hidden}.bar i{display:block;height:100%;background:var(--mint)}
+#toasts{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:50}
+.toast{background:var(--em);color:#fff;border-left:5px solid var(--mint);padding:12px 16px;border-radius:10px;box-shadow:0 8px 24px #0005}
+footer{background:var(--em);color:#cfe8dc;padding:30px 20px;font-size:.9rem}footer .grid{max-width:1100px;margin:auto}footer a{display:block;cursor:pointer;padding:2px 0}
+.tip{border-bottom:1px dotted currentColor;cursor:help}
+@media print{nav,footer,.noprint,#toasts{display:none}}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,3 58,18 58,46 32,61 6,46 6,18' fill='%230F382C' stroke='%2322C55E' stroke-width='3'/%3E%3Cpath d='M10 32Q32 12 54 32Q32 52 10 32Z' fill='none' stroke='%2322C55E' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23D97706'/%3E%3C/svg%3E">
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="lgg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22C55E"/><stop offset="1" stop-color="#86efac"/></linearGradient>
+<linearGradient id="lgd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBBF24"/><stop offset="1" stop-color="#D97706"/></linearGradient>
+<symbol id="lg" viewBox="0 0 64 64">
+<polygon points="32,3 58,18 58,46 32,61 6,46 6,18" fill="#0a2a20" stroke="url(#lgg)" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M9 32Q32 11 55 32Q32 53 9 32Z" fill="none" stroke="url(#lgg)" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M32 44V24" stroke="url(#lgd)" stroke-width="2" stroke-linecap="round"/>
+<g fill="url(#lgd)"><ellipse cx="32" cy="22" rx="2.2" ry="4"/><ellipse cx="27.5" cy="28" rx="2" ry="3.6" transform="rotate(-38 27.5 28)"/><ellipse cx="36.5" cy="28" rx="2" ry="3.6" transform="rotate(38 36.5 28)"/><ellipse cx="27.5" cy="35" rx="2" ry="3.6" transform="rotate(-38 27.5 35)"/><ellipse cx="36.5" cy="35" rx="2" ry="3.6" transform="rotate(38 36.5 35)"/></g>
+<circle cx="9" cy="32" r="2.4" fill="#D97706"/><circle cx="55" cy="32" r="2.4" fill="#D97706"/>
+<path d="M19 20.5A19 19 0 0 1 45 20.5" fill="none" stroke="#22C55E" stroke-width="1.2" stroke-dasharray="1.5 3" stroke-linecap="round"/>
+</symbol></defs></svg>
+<nav id="nav"></nav>
+<main id="app"></main>
+<footer><div class="grid">
+<div><svg width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="AgriVision AI logo"><use href="#lg"/></svg><br><b>AgriVision AI</b><br><i>Grown honest. Traded direct.</i><p>Pitch: direct, certified, escrow-backed trade that returns the full value of a harvest to the farmer who grew it.</p></div>
+<div id="fl"></div>
+<div><span class="badge">ISO-22000</span> <span class="badge g">Fraud Protection Protocol</span> <span class="badge">Blockchain Ledger Verified</span><br><br>
+<input type="text" id="nl" placeholder="Email address" aria-label="Email" style="max-width:200px"> <button class="btn" onclick="toast('Subscribed to the newsletter')">Subscribe</button></div></div></footer>
+<div id="toasts" aria-live="polite"></div>
+<script>
+const $=s=>document.querySelector(s);
+const PAGES=[['home','Home'],['scan','AI Diagnostic & Grading'],['passport','Trade Passport'],['certs','Quality Certificates'],['market','Direct Marketplace'],['vault','Escrow & Yield Vault']];
+const T={ur:{Home:'ہوم','AI Diagnostic & Grading':'اے آئی تشخیص و درجہ بندی','Trade Passport':'تجارتی پاسپورٹ','Quality Certificates':'معیاری سرٹیفکیٹ','Direct Marketplace':'براہ راست منڈی','Escrow & Yield Vault':'ایسکرو و پیداوار والٹ',h:'کسانوں کا تحفظ۔ آڑھتی کا خاتمہ۔ معیار کی ضمانت۔',w:'فارم ڈیش بورڈ'},
+sd:{Home:'گھر','AI Diagnostic & Grading':'اي آءِ تشخيص ۽ درجه بندي','Trade Passport':'واپاري پاسپورٽ','Quality Certificates':'معيار سرٽيفڪيٽ','Direct Marketplace':'سڌو منڊي','Escrow & Yield Vault':'ايسڪرو ۽ پيداوار والٽ',h:'ڪارين جو تحفظ. آڙهتي جو خاتمو. معيار جي ضمانت.',w:'فارم ڊيش بورڊ'}};
+let lang='en',wallet=false,certs=[],mf='All',scanRes=null,imgURL=null;
+const tr=k=>(T[lang]&&T[lang][k])||k;
+function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;$('#toasts').append(d);setTimeout(()=>d.remove(),3200)}
+function nav(){const p=(location.hash||'#home').slice(1);
+$('#nav').innerHTML='<b onclick="location.hash=\'home\'" style="display:flex;align-items:center;gap:9px"><svg width="38" height="38" viewBox="0 0 64 64" role="img" aria-label="AgriVision AI logo"><use href="#lg"/></svg><span>Agri<i>Vision</i> <small style="color:#FBBF24;font-size:.62em;letter-spacing:.08em">AI</small></span></b>'+PAGES.map(([id,n])=>`<a class="${id==p?'on':''}" href="#${id}">${tr(n)}</a>`).join('')+
+`<select aria-label="Language" onchange="lang=this.value;document.documentElement.dir=lang=='en'?'ltr':'rtl';render()"><option value="en">English</option><option value="ur" ${lang=='ur'?'selected':''}>اردو</option><option value="sd" ${lang=='sd'?'selected':''}>سنڌي</option></select>
+<button class="ic" onclick="const r=document.documentElement;r.dataset.theme=(r.dataset.theme=='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches))?'light':'dark'" aria-label="Toggle theme">◐</button>
+<button class="btn" onclick="wallet=!wallet;toast(wallet?'Wallet connected: 0x7aF3…c91E':'Wallet disconnected');render()">${wallet?'Farm Dashboard':(lang=='en'?'Connect Wallet':tr('w'))}</button>`;
+$('#fl').innerHTML=PAGES.map(([id,n])=>`<a href="#${id}">${tr(n)}</a>`).join('')}
+const V={};
+V.home=()=>`<section class="hero"><h1>${lang=='en'?'Protecting Farmers. Eliminating Middlemen. Guaranteeing Quality.':tr('h')}</h1>
+<p>AI-Powered Crop Diagnostics meets Tamper-Proof Smart Quality Certificates to unlock direct global and local trade for farmers.</p>
+<div class="row"><button class="btn" onclick="location.hash='scan'">Scan Crop Now</button><button class="btn s" style="color:#fff;border-color:#fff" onclick="location.hash='certs'">Verify Batch Certificate</button></div>
+<div class="cmp" id="cmp" style="--p:50%"><div class="bad"><b>Traditional Middleman Trade</b>30–40% value loss &amp; price fraud</div>
+<div class="good"><b style="text-align:right">AgriVision AI Direct Trade</b><span style="text-align:right">100% value retained, certified grade</span></div>
+<span class="knob"></span><input type="range" min="5" max="95" value="50" aria-label="Compare trade models" oninput="$('#cmp').style.setProperty('--p',this.value+'%')"></div></section>
+<div class="grid" style="margin-bottom:24px">${[['$4.2M','Saved for Farmers'],['120,000+','Tons Certified'],['0%','Middleman Exploitation'],['99.4%','AI Crop Grading Accuracy']].map(s=>`<div class="card stat"><b>${s[0]}</b>${s[1]}</div>`).join('')}</div>
+<h2>Core features</h2><div class="grid">${[['AI Vision Scan','Photograph a crop, get variety, health and grade.','scan'],['QR Certificate Engine','Hash-signed certificates buyers verify in seconds.','passport'],['Smart Escrow Vault','Lock future yield, receive guaranteed payouts.','vault'],['Land Satellite Health','NDVI field-health trend for every registered plot. <span class="tip" title="Vegetation index from satellite imagery">What is NDVI?</span>','scan']].map(f=>`<a class="card" style="text-decoration:none;cursor:pointer" href="#${f[2]}"><h3>${f[0]}</h3><p>${f[1]}</p></a>`).join('')}</div>`;
+const CROPS={Wheat:['Sehar-2006 Wheat','Yellow rust','Spray propiconazole within 3 days; avoid late nitrogen.'],Cotton:['BT-886 Cotton','Pink bollworm','Install pheromone traps; apply approved IPM sprays.'],Mangoes:['Sindhri Mango','Anthracnose','Prune infected twigs; copper-based fungicide before ripening.'],Rice:['Super Basmati','Bacterial leaf blight','Drain field, reduce nitrogen, apply copper bactericide.'],Sugarcane:['CP-77-400 Sugarcane','Red rot','Remove infected stools; use certified disease-free setts.']};
+V.scan=()=>`<h1 style="font-size:2.4rem">AI Diagnostic &amp; Grading</h1><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div>
+<div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload crop photo" onclick="$('#file').click()">${imgURL?`<img src="${imgURL}" alt="Crop">`:'<div class="sample" id="smp"></div><b style="position:relative;background:#0009;color:#fff;padding:6px 12px;border-radius:8px">Drop a crop photo or tap to browse</b>'}<div class="ret"></div></div>
+<input type="file" id="file" accept="image/*" hidden>
+<label>Crop</label><select class="f" id="crop">${Object.keys(CROPS).map(c=>`<option>${c}</option>`).join('')}</select>
+<div class="row"><button class="btn" id="go" onclick="runScan()">Simulate AI Scan</button></div></div>
+<div class="card" id="out">${scanRes?scanOut():'<p>Results appear here after a scan.</p>'}</div></div>`;
+function scanOut(){const r=scanRes;return `<h3>${r.v}</h3><p><span class="badge">${r.crop}</span> <span class="badge g">Grade ${r.g}</span></p>
+<div class="kv"><span>Moisture</span><b>${r.m}%</b><span>Grain length / size</span><b>${r.l} mm</b><span>Color uniformity</span><b>${r.u}%</b><span>Defects</span><b>${r.d}%</b></div>
+<div class="bar"><i style="width:${r.s}%"></i></div><p>Quality score ${r.s}/100</p>
+<p><b>Health:</b> ${r.h} detected (${r.c}% confidence).<br><b>Remedy:</b> ${r.rm}</p>
+<button class="btn g" onclick="location.hash='passport'">Create certificate from this scan</button>`}
+function runScan(){$('#drop').classList.add('scan');$('#go').disabled=true;
+setTimeout(()=>{const c=$('#crop').value,[v,h,rm]=CROPS[c];const R=(a,b)=>+(a+Math.random()*(b-a)).toFixed(1);
+const m=R(9,15),u=R(82,99),d=R(.5,7),l=R(6,9);const s=Math.round(Math.max(40,Math.min(99,100-Math.abs(m-12)*3-d*3+(u-85)*.6)));
+const g=s>=94&&d<2?'Export Quality':s>=88?'A+':s>=78?'A':'B';
+scanRes={crop:c,v,h,rm,m,u,d,l,s,g,c:R(91,99)};$('#out').innerHTML=scanOut();$('#drop').classList.remove('scan');$('#go').disabled=false;toast('Scan complete: Grade '+g)},2200)}
+V.passport=()=>`<h1 style="font-size:2.4rem">Trade Passport</h1><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="card noprint">
+<label>Farmer ID</label><input type="text" id="f1" value="PK-SD-20418">
+<label>Farm location</label><input type="text" id="f2" value="Bahawalpur, Punjab">
+<label>Crop variety</label><input type="text" id="f3" value="${scanRes?scanRes.v:'Super Basmati'}">
+<label>Harvest date</label><input type="date" id="f4" value="${new Date().toISOString().slice(0,10)}">
+<label>Lot weight (tons)</label><input type="number" id="f5" value="25" min="1">
+<label>AI health / grade score (0–100)</label><input type="number" id="f6" value="${scanRes?scanRes.s:92}" min="0" max="100">
+<div class="row"><button class="btn" onclick="genCert()">Generate Cryptographic Quality Certificate</button></div></div>
+<div id="certbox">${certs[0]?certHTML(certs[0]):'<div class="card"><p>Your certificate will appear here, ready to print or save as PDF.</p></div>'}</div></div>`;
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function genCert(){const g=i=>$('#f'+i).value;const sc=+g(6);
+const c={fid:g(1),loc:g(2),crop:g(3),date:g(4),wt:g(5),sc,grade:sc>=94?'Export Quality':sc>=88?'A+':sc>=78?'A':'B',pest:(Math.random()*.05).toFixed(3)+' ppm',moist:(10+Math.random()*3).toFixed(1)+'%',geo:(29.39+Math.random()*.1).toFixed(4)+'°N, '+(71.68+Math.random()*.1).toFixed(4)+'°E',ts:Date.now()};
+c.hash=await sha(JSON.stringify(c));c.id='AV-'+c.hash.slice(0,8).toUpperCase();certs.unshift(c);$('#certbox').innerHTML=certHTML(c);
+new QRCode($('#qr'),{text:'https://verify.agrivision.ai/batch/'+c.id+'?h='+c.hash.slice(0,16),width:110,height:110});toast('Certificate generated: '+c.id)}
+const certHTML=c=>`<div class="cert"><div class="seal">AGRIVISION VERIFIED</div><h3>Batch Passport ${c.id}</h3>
+<div class="kv"><span>Farmer ID</span><b>${c.fid}</b><span>Crop</span><b>${c.crop}</b><span>Harvest</span><b>${c.date}</b><span>Lot weight</span><b>${c.wt} t</b><span>Quality grade</span><b>${c.grade} (${c.sc})</b><span>Moisture</span><b>${c.moist}</b><span>Pesticide residue</span><b>${c.pest}</b><span>Geo-stamp</span><b>${c.geo}</b></div>
+<div id="qr" style="margin:10px 0"></div><small>Anti-fraud SHA-256 signature. Any change to weight or grade breaks it.</small><code>${c.hash}</code>
+<button class="btn g noprint" style="margin-top:12px" onclick="print()">Print / Save PDF</button></div>`;
+V.certs=()=>`<h1 style="font-size:2.4rem">Quality Certificates</h1><div class="card"><label>Verify a batch by ID or hash</label><div class="row"><input type="text" id="vq" placeholder="AV-XXXXXXXX or full hash" style="max-width:420px"><button class="btn" onclick="verify()">Verify Batch Certificate</button></div><div id="vr"></div></div>
+<h3 style="margin-top:24px">Issued in this session</h3>${certs.length?`<div class="grid">${certs.map(c=>`<div class="card"><b>${c.id}</b><br>${c.crop} · ${c.wt} t<br><span class="badge">${c.grade}</span></div>`).join('')}</div>`:'<p>No certificates yet. Generate one in Trade Passport.</p>'}`;
+function verify(){const q=$('#vq').value.trim().toLowerCase();const c=certs.find(c=>c.id.toLowerCase()==q||c.hash==q);
+$('#vr').innerHTML=c?`<p><span class="badge">Authentic</span> ${c.crop}, ${c.wt} t, grade ${c.grade}. Signature matches the ledger.</p>`:'<p><span class="badge g">Not found</span> No matching certificate. Check the ID, or treat the batch as unverified.</p>';
+c?toast('Certificate verified'):toast('No matching certificate')}
+const AUC=[['Cotton','Cotton Bales, 40 t',4200,'Verified Exporter'],['Rice','Basmati Rice, 60 t',1150,'Certified Domestic Retailer'],['Rice','Rice Husks, 30 t',95,'Verified Exporter'],['Mangoes','Sindhri Mangoes, 12 t',1800,'Certified Domestic Retailer'],['Wheat','Sehar Wheat, 80 t',420,'Verified Exporter']].map((a,i)=>({id:i,crop:a[0],n:a[1],bid:a[2],b:a[3],t:300+i*170,locked:0}));
+V.market=()=>`<h1 style="font-size:2.4rem">Direct Marketplace</h1><div class="chips">${['All','Cotton','Rice','Mangoes','Wheat'].map(c=>`<button class="chip ${c==mf?'on':''}" onclick="mf='${c}';render()">${c}</button>`).join('')}</div>
+<div class="grid" id="auc">${AUC.filter(a=>mf=='All'||a.crop==mf).map(a=>`<div class="card"><span class="badge">✔ ${a.b}</span><h3 style="margin-top:8px">${a.n}</h3><p>Highest bid <b>$<span id="b${a.id}">${a.bid}</span>/t</b><br>Closes in <span id="t${a.id}"></span></p>
+<div class="row"><button class="btn s" onclick="bid(${a.id})" ${a.locked?'disabled':''}>Bid +2%</button><button class="btn" id="l${a.id}" onclick="lock(${a.id})" ${a.locked?'disabled':''}>${a.locked?'Locked in escrow':'Lock Deal in Escrow'}</button></div></div>`).join('')}</div>`;
+function bid(i){const a=AUC[i];a.bid=Math.round(a.bid*1.02);$('#b'+i).textContent=a.bid;toast('Bid placed: $'+a.bid+'/t')}
+function lock(i){const a=AUC[i];a.locked=1;render();toast('Batch locked in escrow: '+a.n)}
+setInterval(()=>AUC.forEach(a=>{a.t=Math.max(0,a.t-1);const e=document.getElementById('t'+a.id);if(e)e.textContent=Math.floor(a.t/60)+'m '+String(a.t%60).padStart(2,'0')+'s'}),1000);
+const PR={Wheat:[2.6,420],Cotton:[1.1,1500],Mangoes:[4,1800],Rice:[2.8,1100],Sugarcane:[28,60]};
+V.vault=()=>`<h1 style="font-size:2.4rem">Smart Yield Vault &amp; Escrow</h1><p style="max-width:62ch">Arthis lend before harvest at steep rates, then set the price. Lock your graded future yield here and let verified buyers bid against a guaranteed floor.</p>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="card"><h3>Live yield calculator</h3><label>Crop</label><select class="f" id="vc" onchange="calc()">${Object.keys(PR).map(c=>`<option>${c}</option>`).join('')}</select>
+<label>Acreage: <b id="ac">20</b> acres</label><input type="range" id="ar" min="1" max="200" value="20" oninput="calc()"><div id="cr"></div>
+<div class="row"><button class="btn" onclick="toast('Batch locked in escrow: future yield tokenized')">Lock yield in vault</button></div></div>
+<div class="card"><h3>Open B2B bids on vault yields</h3>${[['Verified Exporter, UAE','Basmati 45 t','$1,180/t'],['Domestic Food Processor','Wheat 90 t','$440/t'],['Verified Exporter, EU','Mangoes 15 t','$1,950/t']].map(b=>`<p><b>${b[0]}</b><br>${b[1]} at ${b[2]} <span class="badge">Escrow funded</span></p>`).join('')}</div></div>`;
+function calc(){const c=$('#vc').value,a=+$('#ar').value;$('#ac').textContent=a;const[y,p]=PR[c],tons=a*y,fl=Math.round(tons*p*.95),mm=Math.round(tons*p*.62);
+$('#cr').innerHTML=`<div class="kv" style="color:inherit"><span>Expected yield</span><b>${tons.toFixed(1)} t</b><span>Vault price floor</span><b>$${fl.toLocaleString()}</b><span>Middleman offer (~62%)</span><b>$${mm.toLocaleString()}</b><span>You keep extra</span><b style="color:var(--mint)">$${(fl-mm).toLocaleString()}</b></div>`}
+function render(){nav();const p=(location.hash||'#home').slice(1);$('#app').innerHTML=(V[p]||V.home)();scrollTo(0,0);
+if(p=='scan'){const d=$('#drop'),f=$('#file');const set=x=>{if(!x)return;imgURL=URL.createObjectURL(x);scanRes=null;render();toast('Image uploaded')};
+f.onchange=()=>set(f.files[0]);['dragover','dragenter'].forEach(e=>d.addEventListener(e,ev=>{ev.preventDefault();d.classList.add('hv')}));
+['dragleave','drop'].forEach(e=>d.addEventListener(e,ev=>{ev.preventDefault();d.classList.remove('hv');if(e=='drop')set(ev.dataTransfer.files[0])}))}
+if(p=='vault')calc();if(p=='market')AUC.forEach(a=>{const e=$('#t'+a.id);if(e)e.textContent=Math.floor(a.t/60)+'m '+String(a.t%60).padStart(2,'0')+'s'})}
+addEventListener('hashchange',render);render();
+</script></body></html>
